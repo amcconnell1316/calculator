@@ -3,17 +3,12 @@ const currentCalculation = {
     number2: null,
     operator: null,
     result: "",
+    calculationString: "",
     addElement: function(digit) {
         if(digit.match(/[0-9]/)){
             this.storeNumber(digit);
         } else if(digit.match(/[/*\-+]/)) {
-            if(this.operator === null){
-                this.storeOperator(digit);
-            } else {
-                if (doCalculation()) {
-                    this.storeOperator(digit);
-                }
-            }
+            this.storeOperator(digit);
         } else if(digit.match("=")) {
             this.doCalculation();
         }
@@ -26,7 +21,15 @@ const currentCalculation = {
         }
     },
     storeOperator: function(operator) {
-        this.operator = operator;
+        if(this.operator === null){
+            this.operator = operator;
+        } else {
+            if (this.doCalculation()) {
+                this.number1 = this.result;
+                this.operator = operator;
+                this.number2 = null;
+            }
+        }
     },
     checkValidCalculation: function() {
         let retObj = {
