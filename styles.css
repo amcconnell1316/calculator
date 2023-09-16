@@ -1,0 +1,27 @@
+#calculatorContainer {
+    border-width: 4px;
+    border-style: solid;
+    border-color: black;
+    width: 400px;
+    height: 400px;
+
+    display: flex;
+    flex-direction: column;
+    align-content: stretch;
+}
+
+.row {
+    flex-grow: 1;
+    display:flex; 
+}
+
+button {
+    flex-grow: 1;
+    font-size: xx-large;
+    width: 100px;
+}
+
+.number {
+    text-align: right;
+    width: 400px;
+}
