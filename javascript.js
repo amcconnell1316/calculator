@@ -9,9 +9,7 @@ const currentCalculation = {
             this.storeNumber(digit);
         } else if(digit.match(/[/*\-+]/)) {
             this.storeOperator(digit);
-        } else if(digit.match("=")) {
-            this.doCalculation();
-        }
+        } 
     },
     storeNumber: function(num) {
         if(this.number1 === null) {
@@ -85,6 +83,13 @@ const currentCalculation = {
             }   
         }
         return calculationString; 
+    },
+    clearCalculation: function() {
+        this.number1 = null;
+        this.number2 = null;
+        this.operator = null;
+        this.result = "";
+        this.calculationString = "";
     }
 }
 
@@ -95,10 +100,20 @@ function handleButtonPress(e){
     updateCalculationDiv();
 }
 
+function calculate(e) {
+    currentCalculation.doCalculation();
+    updateCalculationDiv();
+}
+
 function updateCalculationDiv() {
     let calculationString = "";    
     calculationPara.textContent = currentCalculation.getCalculationString();
     resultPara.textContent = currentCalculation.result;
+}
+
+function clearCalculator(e) {
+    currentCalculation.clearCalculation();
+    updateCalculationDiv();
 }
 
 
@@ -118,7 +133,9 @@ calcBtn.addEventListener('click', handleButtonPress);
 calcBtn = document.getElementById("key+");
 calcBtn.addEventListener('click', handleButtonPress);
 calcBtn = document.getElementById("key=");
-calcBtn.addEventListener('click', handleButtonPress);
+calcBtn.addEventListener('click', calculate);
+calcBtn = document.getElementById("keyClr");
+calcBtn.addEventListener('click', clearCalculator);
 
 
 
