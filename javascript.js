@@ -4,6 +4,10 @@ const currentCalculation = {
     operator: null,
     result: "",
     calculationString: "",
+    isValidObj: {
+        isValid: true,
+        errMsg: ""
+    },
     addElement: function(digit) {
         if(digit.match(/[0-9]/)){
             this.storeNumber(digit);
@@ -12,21 +16,31 @@ const currentCalculation = {
         } 
     },
     storeNumber: function(num) {
-        if(this.number1 === null) {
+        if(this.number1 === null || this.number1 === 0) {
             this.number1 = parseFloat(num);
         } else if(this.operator === null) {
             this.number1 = parseFloat(this.number1.toString() + num);
-        } else if(this.number2 === null) {
+        } else if(this.number2 === null || this.number2 === 0) {
             this.number2 = parseFloat(num);
         } else {
             this.number2 = parseFloat(this.number2.toString() + num);
         }
+        this.isValidObj = {
+            isValid: true,
+            errMsg: ""
+        };
     },
     storeOperator: function(operator) {
         if(this.operator === null){
             this.operator = operator;
+            this.isValidObj = {
+                isValid: true,
+                errMsg: ""
+            };
         } else {
-            if (this.doCalculation()) {
+            // If a second operator is pressed, force the calculation to execute to prepare to do more
+            this.doCalculation()
+            if (this.isValidObj.isValid) {
                 this.number1 = this.result;
                 this.operator = operator;
                 this.number2 = null;
@@ -34,23 +48,18 @@ const currentCalculation = {
         }
     },
     checkValidCalculation: function() {
-        let retObj = {
-            isValid: true,
-            errMsg: ""
-        }
         if(this.number1 === null || this.number2 === null || this.operator === null) {
-            retObj = {isValid: false, errMsg: "" };
+            this.isValidObj = {isValid: false, errMsg: "" };
+        } else if(this.number2 === 0 && this.operator === "/") {
+            this.isValidObj = {isValid: false, errMsg: "Can't divide by zero" };
+        } else {
+            this.isValidObj = {isValid: true, errMsg: ""};
         }
-        if(this.number2 === 0 && this.operator === "/") {
-            retObj = {isValid: false, errMsg: "Can't divide by zero" };
-
-        }
-        return retObj;
     },
     doCalculation: function(){
         let result = null;
-        const isValidObj = this.checkValidCalculation();
-        if(isValidObj.isValid) {
+        this.checkValidCalculation();
+        if(this.isValidObj.isValid) {
             switch(this.operator){
                 case "/":
                     result = this.number1 / this.number2;
@@ -66,10 +75,7 @@ const currentCalculation = {
                     break;
             }
             this.result = Math.floor(result*10000)/10000; //rounds to 5 decimal places
-        } else {
-            if(isValidObj.errMsg) {alert(isValidObj.errMsg);}
-        }
-        return isValidObj;
+        } 
     },
     getCalculationString: function() {
         let calculationString = ""
@@ -90,18 +96,24 @@ const currentCalculation = {
         this.operator = null;
         this.result = "";
         this.calculationString = "";
+        this.isValidObj = {
+            isValid: true,
+            errMsg: ""
+        };
     }
 }
 
 function handleButtonPress(e){
     const btnId = e.currentTarget.id;
-    const digit = btnId[btnId.length -1];
+    const digit = btnId[btnId.length - 1];
     currentCalculation.addElement(digit);
+    if(currentCalculation.isValidObj.errMsg) {alert(currentCalculation.isValidObj.errMsg);}
     updateCalculationDiv();
 }
 
 function calculate(e) {
     currentCalculation.doCalculation();
+    if(currentCalculation.isValidObj.errMsg) {alert(currentCalculation.isValidObj.errMsg);}
     updateCalculationDiv();
 }
 
