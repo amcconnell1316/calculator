@@ -16,8 +16,12 @@ const currentCalculation = {
     storeNumber: function(num) {
         if(this.number1 === null) {
             this.number1 = parseFloat(num);
-        } else if(this.number2 === null && this.operator !== null) {
+        } else if(this.operator === null) {
+            this.number1 = parseFloat(this.number1.toString() + num);
+        } else if(this.number2 === null) {
             this.number2 = parseFloat(num);
+        } else {
+            this.number2 = parseFloat(this.number2.toString() + num);
         }
     },
     storeOperator: function(operator) {
@@ -63,7 +67,7 @@ const currentCalculation = {
                     result = this.number1 + this.number2;
                     break;
             }
-            this.result = result;
+            this.result = Math.floor(result*10000)/10000; //rounds to 5 decimal places
         } else {
             if(isValidObj.errMsg) {alert(isValidObj.errMsg);}
         }
