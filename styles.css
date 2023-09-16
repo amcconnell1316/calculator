@@ -21,7 +21,14 @@ button {
     width: 100px;
 }
 
-.number {
+.numbers {
     text-align: right;
-    width: 400px;
+    font-size: x-large;
+    width: 392px;
+    height: 30px;
+    border-width: 4px 4px 0px 4px;
+    border-style: solid;
+    border-color: black;
+    margin: 0;
+    padding: 4px;
 }
